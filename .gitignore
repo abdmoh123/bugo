@@ -1,0 +1,4 @@
+# Static html and css files that will be served by the web server
+public/
+# Markdown files to be generated into html
+content/
