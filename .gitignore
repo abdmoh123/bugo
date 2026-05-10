@@ -2,3 +2,7 @@
 public/
 # Markdown files to be generated into html
 content/
+
+# Python related stuff
+.venv/
+__pycache__/
