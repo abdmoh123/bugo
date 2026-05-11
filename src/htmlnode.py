@@ -8,7 +8,7 @@ class HTMLTagType(StrEnum):
     P = auto()
     H = auto()
     IMG = auto()
-    B = auto()
+    BOLD = "b"
     ITALIC = "i"
     CODE = auto()
     SPAN = auto()

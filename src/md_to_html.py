@@ -7,7 +7,7 @@ def text_node_to_html_node(text_node: TextNode) -> HTMLNode:
         case TextType.TEXT:
             return LeafNode(None, text_node.text)
         case TextType.BOLD:
-            return LeafNode(HTMLTag(HTMLTagType.B), text_node.text)
+            return LeafNode(HTMLTag(HTMLTagType.BOLD), text_node.text)
         case TextType.ITALIC:
             return LeafNode(HTMLTag(HTMLTagType.ITALIC), text_node.text)
         case TextType.CODE:
