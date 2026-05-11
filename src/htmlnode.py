@@ -6,13 +6,13 @@ from typing import override
 class HTMLTagType(StrEnum):
     A = "a"
     P = "p"
-    H1 = "h"
+    H = "h"
 
 
 @dataclass(frozen=True)
 class HTMLTag:
     tag_type: HTMLTagType
-    level: int | None
+    level: int | None = None
 
     @override
     def __str__(self) -> str:
