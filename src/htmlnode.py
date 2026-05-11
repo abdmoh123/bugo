@@ -1,12 +1,12 @@
 from dataclasses import dataclass
-from enum import StrEnum
+from enum import StrEnum, auto
 from typing import override
 
 
 class HTMLTagType(StrEnum):
-    A = "a"
-    P = "p"
-    H = "h"
+    A = auto()
+    P = auto()
+    H = auto()
 
 
 @dataclass(frozen=True)
