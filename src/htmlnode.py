@@ -7,6 +7,9 @@ class HTMLTagType(StrEnum):
     A = auto()
     P = auto()
     H = auto()
+    B = auto()
+    SPAN = auto()
+    DIV = auto()
 
 
 @dataclass(frozen=True)
