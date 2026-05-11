@@ -4,7 +4,7 @@ from typing import override
 
 
 class TextType(StrEnum):
-    PLAIN = auto()
+    TEXT = auto()
     BOLD = auto()
     ITALIC = auto()
     CODE = auto()
