@@ -3,6 +3,8 @@ from enum import StrEnum, auto
 import re
 from typing import override
 
+from src.md_utils import extract_markdown_images, extract_markdown_links
+
 
 class TextType(StrEnum):
     TEXT = auto()
@@ -64,5 +66,67 @@ def split_nodes_delimiter(old_nodes: list[TextNode], text_type: TextType) -> lis
         for i, text in enumerate(split_node_text):
             new_text_type = TextType.TEXT if i % 2 == 0 else text_type
             new_nodes.append(TextNode(text, new_text_type))
+
+    return new_nodes
+
+
+def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
+    new_nodes: list[TextNode] = []
+    for node in old_nodes:
+        if node.text_type is not TextType.TEXT:
+            new_nodes.append(node)
+            continue
+
+        images: list[tuple[str, str]] = extract_markdown_images(node.text)
+        if not images:
+            new_nodes.append(node)
+            continue
+
+        pattern: str = '|'.join(
+            re.escape(f"![{alt_text}]({url})") for alt_text, url in images
+        )
+        split_node_text: list[str] = re.split(pattern, node.text)
+
+        # Ensure the text and image lists are the same length
+        while len(split_node_text) > len(images):
+            images.append(("", ""))
+
+        for text, image in zip(split_node_text, images):
+            if text != "":
+                new_nodes.append(TextNode(text, TextType.TEXT))
+            alt_text, url = image
+            if alt_text != "" and url != "":
+                new_nodes.append(TextNode(alt_text, TextType.IMAGE, url))
+
+    return new_nodes
+
+
+def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
+    new_nodes: list[TextNode] = []
+    for node in old_nodes:
+        if node.text_type is not TextType.TEXT:
+            new_nodes.append(node)
+            continue
+
+        links: list[tuple[str, str]] = extract_markdown_links(node.text)
+        if not links:
+            new_nodes.append(node)
+            continue
+
+        pattern: str = '|'.join(
+            "(?<!!)" + re.escape(f"[{alt}]({url})") for alt, url in links
+        )
+        split_node_text: list[str] = re.split(pattern, node.text)
+
+        # Ensure the text and link lists are the same length
+        while len(split_node_text) > len(links):
+            links.append(("", ""))
+
+        for text, link in zip(split_node_text, links):
+            if text != "":
+                new_nodes.append(TextNode(text, TextType.TEXT))
+            link_name, url = link
+            if link_name != "" and url != "":
+                new_nodes.append(TextNode(link_name, TextType.LINK, url))
 
     return new_nodes
