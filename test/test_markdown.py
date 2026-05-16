@@ -1,6 +1,6 @@
 import unittest
 
-from src.markdown import extract_markdown_images, extract_markdown_links, markdown_to_blocks
+from src.markdown import BlockType, block_to_block_type, extract_markdown_images, extract_markdown_links, markdown_to_blocks
 
 
 class TestMDUtils(unittest.TestCase):
@@ -68,6 +68,56 @@ Third test line.
 """
         blocks = markdown_to_blocks(md)
         self.assertEqual(blocks, ["Test line.", "Second test line.", "Third test line."])
+
+
+class TestBlockToBlockType(unittest.TestCase):
+    def test_unordered_list(self):
+        block = """- You missed that one
+- Try another"""
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.UNORDERED_LIST)
+
+    def test_ordered_list(self):
+        block = """1. You missed that one
+2. Try another"""
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.ORDERED_LIST)
+
+    def test_headings(self):
+        blocks = [
+            "# Heading 1",
+            "## Heading 2",
+            "### Heading 3",
+            "#### Heading 4",
+            "##### Heading 5",
+            "###### Heading 6",
+        ]
+        block_types = [block_to_block_type(block) for block in blocks]
+        self.assertEqual(block_types, [BlockType.HEADING] * 6)
+
+    def test_code(self):
+        block = """```python
+print('hello world')
+print('foo bar')
+```"""
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.CODE)
+
+    def test_quote(self):
+        block = """> be me
+> create a test case following green text format
+> be embarassed in a few minutes"""
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.QUOTE)
+
+    def test_paragraph(self):
+        block = """This is a paragraph block
+This is also multi-line
+There are no lists here
+Nor code blocks
+Nor headings or quotes"""
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.PARAGRAPH)
 
 
 if __name__ == "__main__":
