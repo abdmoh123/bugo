@@ -92,8 +92,17 @@ class TestBlockToBlockType(unittest.TestCase):
             "##### Heading 5",
             "###### Heading 6",
         ]
+        expected = [BlockType.HEADING] * 6
         block_types = [block_to_block_type(block) for block in blocks]
-        self.assertEqual(block_types, [BlockType.HEADING] * 6)
+        self.assertEqual(block_types, expected)
+
+    def test_not_headings(self):
+        blocks = [
+            "#this_is_not_a_heading_but_a_tag", "####### Invalid Heading 7",
+        ]
+        block_types = [block_to_block_type(block) for block in blocks]
+        expected = [BlockType.PARAGRAPH] * 2
+        self.assertEqual(block_types, expected)
 
     def test_code(self):
         block = """```python
