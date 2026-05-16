@@ -3,7 +3,7 @@ from enum import StrEnum, auto
 import re
 from typing import override
 
-from src.md_utils import extract_markdown_images, extract_markdown_links
+from src.markdown import extract_markdown_images, extract_markdown_links
 
 
 class TextType(StrEnum):

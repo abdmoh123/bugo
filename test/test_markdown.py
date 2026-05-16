@@ -1,6 +1,6 @@
 import unittest
 
-from src.md_utils import extract_markdown_images, extract_markdown_links, markdown_to_blocks
+from src.markdown import extract_markdown_images, extract_markdown_links, markdown_to_blocks
 
 
 class TestMDUtils(unittest.TestCase):
